@@ -157,7 +157,6 @@ void GLWindow::startRender() {
     }
 }
 
-
 bool GLWindow::render()
 {
     if (glfwWindowShouldClose(mWindow))
@@ -165,4 +164,11 @@ bool GLWindow::render()
     glfwPollEvents();
     glfwSwapBuffers(mWindow);
     return true;
+}
+
+void GLWindow::eventLoop() {
+    while (true) {
+        if (!render())
+            break;
+    }
 }

@@ -17,10 +17,11 @@ public:
 
     //设置窗口的渲染函数
     void setRender(FunEntry entry);
-    bool render();
 
     void start();
     void stop();
+
+    void eventLoop();
 
     virtual ~GLWindow();
 
@@ -31,6 +32,9 @@ private:
     // create render thread
     void startRender();
 
+    bool render();
+
+    // For multi thread
     static void *threadEntry(void *glw);
     void * run();
 
