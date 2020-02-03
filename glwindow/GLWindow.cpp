@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 //c++ thread is disable, so using pthread
 #include <pthread.h>
@@ -11,44 +12,31 @@
 // Second: glfw
 #include <GLWindow.h>
 
+#include <Vertex.h>
+#include <Shader.h>
+
 using namespace std;
 
 
 //委派构造函数
-GLWindow::GLWindow() : GLWindow(0, 0, nullptr)
-{
-    /* code */
-}
+GLWindow::GLWindow() : GLWindow(0, 0, nullptr) {}
 
+GLWindow::GLWindow(int width, int height) : GLWindow(width, height, nullptr) {}
 
-
-GLWindow::GLWindow(int width, int height) : GLWindow(width, height, nullptr)
-{
-    /* code */
-}
-
-GLWindow::GLWindow(const char * title) : GLWindow(0, 0, title)
-{
-
-}
-
+GLWindow::GLWindow(const char * title) : GLWindow(0, 0, title) {}
 
 GLWindow::GLWindow(int width, int height, const char* title) try : GLWindow(title, width, height)
 {
-    /* code */
     cout << __func__ << endl;
-}
-catch(const std::exception& e)
+} catch(const std::exception& e)
 {
-    glfwTerminate();//???
+    glfwTerminate();
     std::cerr << e.what() << '\n';
 }
  
-
-
 /////////////////////目标构造函数///////////////////////////////////////
 GLWindow::GLWindow(const char* title, int width, int height) {
-    
+
     //0. init member variable
     if (title != nullptr && strlen(title) > 0) {
         strncpy(mTitile, title, NAMELEN);
@@ -77,18 +65,17 @@ GLWindow::GLWindow(const char* title, int width, int height) {
 
     //4. init glew
     // 让glew来管理OpenGL中的函数指针
-    /*
+
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
         throw("Failed to initialize GLEW");
-    }*/
+    }
     
     //5. 视口
     int w, h;
     glfwGetFramebufferSize(mWindow, &w, &h);
     glViewport(0, 0, w, h);
 }
-
 
 GLWindow::~GLWindow() {
     cout << "deconstruct GLWindow" << endl;
@@ -126,7 +113,6 @@ void GLWindow::stop() {
     }
 }
 
-
 //static
 void *GLWindow::threadEntry(void *glw) {
     return ((GLWindow*)glw)->run();
@@ -162,13 +148,61 @@ bool GLWindow::render()
     if (glfwWindowShouldClose(mWindow))
         return false;
     glfwPollEvents();
+
+    /*
+    glClearColor(1.0f, 0.5f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    */
+
     glfwSwapBuffers(mWindow);
     return true;
 }
 
 void GLWindow::eventLoop() {
-    while (true) {
-        if (!render())
-            break;
+
+    // For Test
+    vector<GLfloat>v{
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
+    };
+
+    /*
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK) {
+        throw("Failed to initialize GLEW");
+    }*/
+
+    Vertex vt(v);
+    Shader vs("vshader.txt", VSHADER);
+    Shader fs("fshader.txt", FSHADER);
+
+    GLuint program;
+    program = glCreateProgram();
+    glAttachShader(program, vs.getShader());
+    glAttachShader(program, fs.getShader());
+    glLinkProgram(program);
+
+    GLint success;
+    GLchar infoLog[512];
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        cout << "Link program failed:" << infoLog << endl;
+    }
+
+    vs.deleteShader();
+    fs.deleteShader();
+
+    glUseProgram(program);
+
+
+    while (!glfwWindowShouldClose(mWindow)) {
+        glfwPollEvents();
+
+        glBindVertexArray(vt.getVAO());
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+        glfwSwapBuffers(mWindow);
     }
 }

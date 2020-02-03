@@ -22,3 +22,5 @@ include_directories(./include)
 
 # Add a list of subdirectories to the build.
 add_subdirectory(glwindow)
+
+add_subdirectory(glprogram)

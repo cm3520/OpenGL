@@ -8,7 +8,6 @@ using namespace std;
 
 Shader::Shader(const char* path, ShaderType type) try :Shader(path, type, true)
 {
-    /* code */
 }
 catch(const std::exception& e)
 {
@@ -84,6 +83,8 @@ Shader::Shader(const char* path, ShaderType type, bool isDelegate) {
         cout << "compile shader failed:" << infoLog << endl;
     }
 
+    mShader = shader;
+    /*
     GLuint program;
     program = glCreateProgram();
     glAttachShader(program, shader);
@@ -94,21 +95,21 @@ Shader::Shader(const char* path, ShaderType type, bool isDelegate) {
         glGetProgramInfoLog(program, 512, NULL, infoLog);
         cout << "Link program failed:" << infoLog << endl;
     }
+    */
+    //glDeleteShader(shader);
 
-    glDeleteShader(shader);
-
-    mProgram = program;
+    //mProgram = program;
 }
 
-
-void Shader::useProgram() {
-    glUseProgram(mProgram);
+GLuint Shader::getShader() {
+    cout << mShader << endl;
+    return mShader;
 }
 
-GLuint Shader::getProgram() {
-    return mProgram;
+void Shader::deleteShader() {
+    glDeleteProgram(mShader);
 }
 
 Shader::~Shader() {
-    glDeleteProgram(mProgram);
+    deleteShader();
 }

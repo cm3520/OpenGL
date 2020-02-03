@@ -16,14 +16,14 @@ public:
     // For fragment shader
     Shader(const char* path, ShaderType type);
 
-    void useProgram();
-    GLuint getProgram();
+    GLuint getShader();
+    void deleteShader();
 
     ~Shader();
 private:
     Shader(const char* path, ShaderType type, bool isDelegate);
 
-    GLuint mProgram{0U};
+    GLuint mShader{0U};
 
     Shader& operator=(const Shader&);
 };
