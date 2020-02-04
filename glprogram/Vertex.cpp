@@ -3,7 +3,9 @@
 
 Vertex::Vertex(const vector<GLfloat> & vertex)
     try : Vertex(true, vertex)
-{}
+{
+    cout << __func__ << endl;
+}
 catch(const std::exception& e)
 {
     std::cerr << e.what() << '\n';
@@ -33,5 +35,5 @@ GLuint Vertex::getVAO() {
 }
 
 Vertex::~Vertex() {
-
+    cout << __func__ << endl;
 }

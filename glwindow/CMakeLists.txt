@@ -11,4 +11,4 @@ aux_source_directory(. SRC)
 # for test
 add_executable(glwindow ${SRC})
 
-target_link_libraries(glwindow glfw3 glew32s glu32 opengl32 pthread glprogram)
+target_link_libraries(glwindow glfw3 pthread glprogram)

@@ -1,6 +1,10 @@
 //C++11 _Pragma: 是一个操作符而不是一个预处理指令(#pragma once)，能使用在宏扩展中，灵活性好
 _Pragma("once")
 
+#include <memory>
+
+#include <GLProgram.h>
+
 #include <GLFW/glfw3.h>
 
 #define NAMELEN (30)
@@ -17,6 +21,7 @@ public:
 
     //设置窗口的渲染函数
     void setRender(FunEntry entry);
+    void setProgram(std::shared_ptr<GLProgram> & program);
 
     void start();
     void stop();
@@ -52,4 +57,6 @@ private:
 
     bool mExitThread{false};
     unsigned long mHandle{0UL};
+
+    std::shared_ptr<GLProgram> mProgram{nullptr};
 };

@@ -7,3 +7,5 @@ aux_source_directory(. SRC)
 
 # static library
  add_library(glprogram STATIC ${SRC})
+
+ target_link_libraries(glprogram glew32s glu32 opengl32)
