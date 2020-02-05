@@ -17,5 +17,6 @@ private:
     GLProgram(bool isDelegate, const char *path);
 
     GLuint mProgram{0UL};
+    GLuint mTexture{0UL};
     GLuint mVAO{0UL};
 };

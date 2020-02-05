@@ -5,6 +5,8 @@
 #include <Shader.h>
 #include <GLProgram.h>
 
+#include <SOIL.h>
+
 using namespace std;
 
 
@@ -24,9 +26,10 @@ GLProgram::GLProgram(bool isDelegate, const char *path) {
 
     // For Test
     vector<GLfloat>v{
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f
+        0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // 右上
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // 右下
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // 左下
+        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f    // 左上
     };
 
     
@@ -59,12 +62,35 @@ GLProgram::GLProgram(bool isDelegate, const char *path) {
 
     glUseProgram(mProgram);
 
+
+    //texture
+    int width, height;
+    unsigned char* image = SOIL_load_image("img.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    SOIL_free_image_data(image);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    mTexture = texture;
+
 }
 
 void GLProgram::render() {
+
+    /*
+    GLint location = glGetUniformLocation(mProgram, "myColor");
+    GLfloat color[]{1.0f, 1.0f, 0.0f, 1.0f};
+    glUniform4fv(location, 1, color);
+    */
+    glBindTexture(GL_TEXTURE_2D, mTexture);
     glBindVertexArray(mVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
+    //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void GLProgram::setViewPort(int wdith, int height) {

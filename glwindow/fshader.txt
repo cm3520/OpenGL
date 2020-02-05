@@ -1,7 +1,15 @@
 #version 330 core
-in vec4 myColor;
+//in vec4 myColor;
+//uniform vec4 myColor;
+in vec2 TexCoord;
+
 out vec4 color;
+
+uniform sampler2D outTexture;
+
 void main()
 {
-    color = myColor;
+    //color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    //color = myColor;
+    color = texture(outTexture, TexCoord);
 }

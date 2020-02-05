@@ -172,7 +172,9 @@ void GLWindow::eventLoop() {
     while (!glfwWindowShouldClose(mWindow)) {
         glfwPollEvents();
         //gl render
+
         mProgram->render();
+
         glfwSwapBuffers(mWindow);
     }
 }
