@@ -1,6 +1,9 @@
 #version 330 core
-//in vec4 myColor;
+in vec3 outColor;
+
+//dynamic set color 
 //uniform vec4 myColor;
+
 in vec2 TexCoord;
 
 out vec4 color;
@@ -9,7 +12,12 @@ uniform sampler2D outTexture;
 
 void main()
 {
+    //init color in local
     //color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    //color = myColor;
-    color = texture(outTexture, TexCoord);
+
+    //read color from vertex
+    //color = vec4(outColor, 1.0);
+
+    //mirror in x or y axis
+    color = texture(outTexture, vec2(TexCoord.x, 1.0f - TexCoord.y)) * vec4(outColor, 1.0);
 }

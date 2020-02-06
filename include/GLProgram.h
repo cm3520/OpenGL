@@ -11,7 +11,7 @@ public:
 
     void render();
     void setViewPort(int wdith, int height);
-
+    void use();
     ~GLProgram();
 private:
     GLProgram(bool isDelegate, const char *path);

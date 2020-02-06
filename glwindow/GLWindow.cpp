@@ -167,12 +167,10 @@ bool GLWindow::render()
 void GLWindow::eventLoop() {
     int w, h;
     glfwGetFramebufferSize(mWindow, &w, &h);
-    //glViewport(0, 0, w, h);
     mProgram->setViewPort(w, h);
     while (!glfwWindowShouldClose(mWindow)) {
         glfwPollEvents();
         //gl render
-
         mProgram->render();
 
         glfwSwapBuffers(mWindow);
